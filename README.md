@@ -116,44 +116,83 @@ Each `(engine, prompt)` pair costs one Bright Data scrape. Runs are fully reprod
 
 ---
 
-## Agent mode (Claude Code + MCP)
+## Two paths — pick what fits you
 
-If you have Claude Code installed and the Bright Data MCP server configured, the agent path gives you richer analysis — hallucination detection, tone analysis, recommendation tracking.
+This repo ships **two interchangeable ways** to run the audit. Same inputs, same outputs — different transport.
 
-### Set up Bright Data MCP
+### Path A — HTTP (default · Python 3.9+ · `run.py` / `sweep.py`)
+
+Uses Bright Data's Web Scraper REST API directly. No extra dependencies beyond `requests`. Best for cron jobs, CI, and automation.
+
+```bash
+python sweep.py
+```
+
+### Path B — Agent via MCP (Python 3.10+ · `sweep_mcp.py`)
+
+Uses **Bright Data's MCP server** (`@brightdata/mcp`) launched via `npx`. The script becomes an MCP client that calls `web_data_chatgpt_ai_insights`, `web_data_perplexity_ai_insights`, and `web_data_grok_ai_insights` as genuine MCP tools. This is the "agent-native" path — your code speaks MCP to Bright Data's tools, exactly like Claude Code or any other MCP-aware agent would.
+
+Prerequisites: Python 3.10+, Node 18+, an npm global cache that can resolve `@brightdata/mcp`.
+
+```bash
+python sweep_mcp.py
+```
+
+The MCP path runs on **free tier** out of the box. The first launch creates the required `mcp_unlocker` and `mcp_browser` zones on your Bright Data account automatically.
+
+### Probe: confirm your MCP setup
+
+```bash
+python scripts/probe_mcp.py
+```
+
+Lists every tool Bright Data's MCP server exposes. You should see `web_data_chatgpt_ai_insights`, `web_data_perplexity_ai_insights`, and `web_data_grok_ai_insights` in the output.
+
+### Claude Code skill (interactive agent use)
+
+For an even more hands-off flow, configure the Bright Data MCP server inside Claude Code:
 
 ```json
 {
   "mcpServers": {
     "brightdata": {
       "command": "npx",
-      "args": ["@brightdata/mcp"],
+      "args": ["-y", "@brightdata/mcp"],
       "env": { "API_TOKEN": "your-token-here", "PRO_MODE": "true" }
     }
   }
 }
 ```
 
-### Use the skill
+Then trigger the bundled skill:
 
 ```
 > check my AI visibility
 ```
 
-Claude reads `queries.yaml`, calls the `web_data_chatgpt_ai_insights` / `web_data_perplexity_ai_insights` MCP tools for each prompt, runs the scorer, and layers an LLM pass to flag hallucinations against `ground_truth.md`. Output is a markdown report in `reports/`.
-
-The skill definition lives at [`.claude/skills/ai-visibility/SKILL.md`](.claude/skills/ai-visibility/SKILL.md).
+The skill reads `queries.yaml`, calls the MCP tools, runs the scorer, and layers an LLM pass to flag hallucinations against `ground_truth.md`. Skill definition: [`.claude/skills/ai-visibility/SKILL.md`](.claude/skills/ai-visibility/SKILL.md).
 
 ---
 
 ## Bright Data products used
+
+### Via the HTTP path (`sweep.py`)
 
 | Product | Dataset ID | Purpose |
 |---|---|---|
 | **ChatGPT Scraper** | `gd_m7aof0k82r803d5bjm` | Live ChatGPT answers + citations |
 | **Perplexity Scraper** | `gd_m7dhdot1vw9a7gc1n` | Live Perplexity answers + sources |
 | **Google AI Scraper** | `gd_mcswdt6z2elth3zqr2` | Live Google AI Mode answers |
-| **Bright Data MCP** (optional) | n/a | Exposes `web_data_*_ai_insights` tools to the agent |
+
+### Via the MCP path (`sweep_mcp.py`)
+
+| Tool | Purpose |
+|---|---|
+| `web_data_chatgpt_ai_insights` | Agent-native ChatGPT answer insights |
+| `web_data_perplexity_ai_insights` | Agent-native Perplexity answer insights |
+| `web_data_grok_ai_insights` | Agent-native Grok answer insights |
+
+Both paths are powered by the same Bright Data infrastructure. The MCP path is the recommended one for agents and AI-native workflows — the HTTP path is for cron / CI / environments where Node isn't available.
 
 Get an API token at [brightdata.com](https://brightdata.com/). A free tier is available — try it with the promo `[PROMO_CODE]` or DM for access.
 

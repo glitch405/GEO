@@ -68,6 +68,7 @@ ENGINE_META: dict[str, dict[str, str]] = {
     "chatgpt":    {"label": "ChatGPT",    "domain": "openai.com",     "tag": "01"},
     "perplexity": {"label": "Perplexity", "domain": "perplexity.ai",  "tag": "02"},
     "google_ai":  {"label": "Google AI",  "domain": "google.com",     "tag": "03"},
+    "grok":       {"label": "Grok",       "domain": "x.ai",           "tag": "04"},
 }
 
 

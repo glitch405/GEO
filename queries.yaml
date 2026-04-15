@@ -25,7 +25,7 @@ brand:
 engines:
   - chatgpt
   - perplexity
-  - google_ai
+  - grok
 
 prompts:
   - "What is the best note-taking app with AI features in 2026?"
