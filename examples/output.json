@@ -1,0 +1,231 @@
+{
+  "brand": "Notion",
+  "summary": {
+    "generated_at": "2026-04-14T21:39:34.392652+00:00",
+    "overall_visibility_score": 65.7,
+    "by_engine": {
+      "google_ai": {
+        "prompts_checked": 5,
+        "mention_rate": "5/5",
+        "avg_visibility_score": 64.0
+      },
+      "perplexity": {
+        "prompts_checked": 4,
+        "mention_rate": "4/4",
+        "avg_visibility_score": 70.0
+      },
+      "chatgpt": {
+        "prompts_checked": 5,
+        "mention_rate": "5/5",
+        "avg_visibility_score": 64.0
+      }
+    }
+  },
+  "results": [
+    {
+      "engine": "google_ai",
+      "prompt": "Where do developers and founders take notes in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 1147,
+      "competitors_mentioned": [
+        "Anytype",
+        "Obsidian"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2737,
+      "visibility_score": 60
+    },
+    {
+      "engine": "perplexity",
+      "prompt": "What is the best note-taking app with AI features in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 100,
+      "competitors_mentioned": [
+        "ClickUp",
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2151,
+      "visibility_score": 80
+    },
+    {
+      "engine": "google_ai",
+      "prompt": "Best productivity app for teams in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 365,
+      "competitors_mentioned": [
+        "ClickUp"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2776,
+      "visibility_score": 60
+    },
+    {
+      "engine": "google_ai",
+      "prompt": "What is the best tool for building a second brain?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 438,
+      "competitors_mentioned": [
+        "Apple Notes",
+        "Evernote",
+        "Logseq",
+        "Obsidian"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2832,
+      "visibility_score": 60
+    },
+    {
+      "engine": "google_ai",
+      "prompt": "Notion vs Obsidian \u2014 which is better for personal knowledge management?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 17,
+      "competitors_mentioned": [
+        "Obsidian"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2352,
+      "visibility_score": 80
+    },
+    {
+      "engine": "perplexity",
+      "prompt": "Where do developers and founders take notes in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 524,
+      "competitors_mentioned": [
+        "Apple Notes",
+        "Confluence",
+        "Logseq",
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 3338,
+      "visibility_score": 60
+    },
+    {
+      "engine": "chatgpt",
+      "prompt": "Notion vs Obsidian \u2014 which is better for personal knowledge management?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 22,
+      "competitors_mentioned": [
+        "Obsidian"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 6269,
+      "visibility_score": 80
+    },
+    {
+      "engine": "perplexity",
+      "prompt": "Best productivity app for teams in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 115,
+      "competitors_mentioned": [
+        "ClickUp"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 4019,
+      "visibility_score": 80
+    },
+    {
+      "engine": "google_ai",
+      "prompt": "What is the best note-taking app with AI features in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 1745,
+      "competitors_mentioned": [
+        "Obsidian"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2567,
+      "visibility_score": 60
+    },
+    {
+      "engine": "chatgpt",
+      "prompt": "What is the best note-taking app with AI features in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 246,
+      "competitors_mentioned": [
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2722,
+      "visibility_score": 60
+    },
+    {
+      "engine": "perplexity",
+      "prompt": "What is the best tool for building a second brain?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 71,
+      "competitors_mentioned": [
+        "Logseq",
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [
+        "Obsidian"
+      ],
+      "cited_our_domain": false,
+      "answer_length": 1546,
+      "visibility_score": 60
+    },
+    {
+      "engine": "chatgpt",
+      "prompt": "What is the best tool for building a second brain?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 652,
+      "competitors_mentioned": [
+        "Evernote",
+        "Logseq",
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2872,
+      "visibility_score": 60
+    },
+    {
+      "engine": "chatgpt",
+      "prompt": "Best productivity app for teams in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 911,
+      "competitors_mentioned": [
+        "ClickUp",
+        "Google Docs"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2722,
+      "visibility_score": 60
+    },
+    {
+      "engine": "chatgpt",
+      "prompt": "Where do developers and founders take notes in 2026?",
+      "brand_mentioned": true,
+      "first_mention_char_index": 857,
+      "competitors_mentioned": [
+        "Apple Notes",
+        "Google Docs",
+        "Logseq",
+        "Obsidian",
+        "Roam Research"
+      ],
+      "recommended_over_us": [],
+      "cited_our_domain": false,
+      "answer_length": 2774,
+      "visibility_score": 60
+    }
+  ]
+}

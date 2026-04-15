@@ -1,0 +1,35 @@
+# AI Visibility Tracker — configuration
+#
+# Demo target: Notion (well-known neutral brand for the TikTok demo).
+
+brand:
+  name: "Notion"
+  aliases:
+    - "Notion.so"
+    - "notion.so"
+  domain: "notion.so"
+  competitors:
+    - "Obsidian"
+    - "ClickUp"
+    - "Coda"
+    - "Airtable"
+    - "Evernote"
+    - "Roam Research"
+    - "Logseq"
+    - "Confluence"
+    - "Craft"
+    - "Anytype"
+    - "Apple Notes"
+    - "Google Docs"
+
+engines:
+  - chatgpt
+  - perplexity
+  - google_ai
+
+prompts:
+  - "What is the best note-taking app with AI features in 2026?"
+  - "Notion vs Obsidian — which is better for personal knowledge management?"
+  - "What is the best tool for building a second brain?"
+  - "Best productivity app for teams in 2026?"
+  - "Where do developers and founders take notes in 2026?"

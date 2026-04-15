@@ -1,0 +1,21 @@
+# Secrets
+.env
+.env.local
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local overrides
+.claude/settings.local.json
+
+# Raw scraper payloads (per-run dev artifacts)
+reports/*_test.json
+reports/*_retry.json
