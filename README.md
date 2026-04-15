@@ -2,7 +2,7 @@
 
 > Is ChatGPT lying about your business? This tool checks every day.
 
-An open-source agent that audits how AI answer engines — **ChatGPT**, **Perplexity**, and **Google AI Mode** — describe any brand. It asks each engine the questions your customers would ask, compares the answers against ground truth, and tells you:
+An open-source agent that audits how AI answer engines — **ChatGPT**, **Perplexity**, **Google AI Mode**, and **Grok** — describe any brand. It asks each engine the questions your customers would ask, compares the answers against ground truth, and tells you:
 
 - when your brand is missing from relevant answers
 - which competitors get recommended instead of you
@@ -22,20 +22,27 @@ In 2026 most buyers start discovery in ChatGPT, Perplexity, or Google AI Mode �
 ## What's in the box
 
 ```
-ai-visibility-tracker/
-├── run.py                  # one-command entrypoint
+GEO/
+├── run.py                  # single-prompt HTTP runner (sequential)
+├── sweep.py                # parallel HTTP sweep — recommended for bulk runs
+├── sweep_mcp.py            # parallel MCP sweep — agent-native path (Python 3.10+)
 ├── queries.yaml            # brand config + the prompts to test
 ├── ground_truth.md         # facts about the brand (for accuracy checks)
 ├── requirements.txt
 ├── .env.example
 ├── src/
-│   ├── brightdata_client.py   # trigger/poll/download wrapper for BD scrapers
+│   ├── brightdata_client.py   # trigger/poll/download wrapper for BD's HTTP scrapers
 │   ├── scorer.py              # deterministic visibility scoring
-│   └── reporter.py            # terminal table + JSON output
+│   ├── reporter.py            # terminal table + JSON writer
+│   └── html_report.py         # HTML dashboard generator
+├── scripts/
+│   ├── probe_mcp.py           # probe BD's MCP server, list available tools
+│   ├── export_png.py          # render HTML → full-page PNG via Playwright
+│   └── export_png.sh          # shell wrapper for export_png.py
 ├── examples/
-│   └── output.json            # sample report
-├── reports/                   # generated reports land here
-└── .claude/skills/ai-visibility/SKILL.md   # Claude Code skill for the agent path
+│   └── output.json            # sample report (real Notion data, MCP sourced)
+├── reports/                   # generated reports + dashboards land here
+└── .claude/skills/ai-visibility/SKILL.md   # Claude Code skill for interactive agent use
 ```
 
 ---
@@ -55,11 +62,13 @@ cp .env.example .env
 
 # 3. (Optional) edit queries.yaml to track your own brand
 
-# 4. Run it
-python run.py
+# 4. Run it (pick one)
+python sweep.py        # parallel HTTP sweep — ~5-8 min for 15 calls
+python sweep_mcp.py    # agent-native MCP sweep (Python 3.10+, requires Node)
+python run.py          # sequential HTTP — slower, one engine/prompt at a time
 ```
 
-You'll see a live terminal table as each AI engine answers, and a full JSON report in `reports/`.
+You'll see a live terminal table as each AI engine answers, plus a JSON report and a rendered HTML dashboard in `reports/`.
 
 ---
 
@@ -271,10 +280,12 @@ brand:
   domain: "yourbrand.com"
   competitors: ["Competitor1", "Competitor2"]
 
+# HTTP path supports: chatgpt, perplexity, google_ai
+# MCP path supports:  chatgpt, perplexity, grok
 engines:
   - chatgpt
   - perplexity
-  - google_ai
+  - google_ai  # swap to 'grok' if using sweep_mcp.py
 
 prompts:
   - "What's the best X for Y?"
