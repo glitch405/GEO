@@ -18,9 +18,7 @@ import argparse
 import asyncio
 import json
 import os
-import re
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -45,6 +43,19 @@ ENGINE_TO_TOOL: dict[str, str] = {
 }
 
 
+ANSWER_KEYS = (
+    "answer_text",
+    "answer_text_markdown",
+    "answer_text_raw",
+    "answer_markdown",
+    "answer",
+    "response_text",
+    "markdown",
+)
+
+CITATION_KEYS = ("citations", "sources", "references", "links_attached")
+
+
 def _coerce_result(engine: str, prompt: str, raw: Any) -> ScrapeResult:
     """BD's MCP tools return content blocks; pick out the JSON payload."""
     payload: dict[str, Any] = {}
@@ -56,7 +67,6 @@ def _coerce_result(engine: str, prompt: str, raw: Any) -> ScrapeResult:
             if not text:
                 continue
             text_chunks.append(text)
-            # Try to parse as JSON — BD usually returns a JSON blob
             try:
                 parsed = json.loads(text)
                 if isinstance(parsed, list) and parsed:
@@ -67,18 +77,28 @@ def _coerce_result(engine: str, prompt: str, raw: Any) -> ScrapeResult:
             except json.JSONDecodeError:
                 continue
 
-    # If nothing parsed, fall back to joined text
     if not payload and text_chunks:
         payload = {"answer_text": "\n".join(text_chunks)}
+
+    answer_text = ""
+    for key in ANSWER_KEYS:
+        value = payload.get(key)
+        if value and isinstance(value, str):
+            answer_text = value
+            break
+
+    citations: list[Any] = []
+    for key in CITATION_KEYS:
+        value = payload.get(key)
+        if value and isinstance(value, list):
+            citations = value
+            break
 
     return ScrapeResult(
         engine=engine,
         prompt=prompt,
-        answer_text=payload.get("answer_text")
-                    or payload.get("answer")
-                    or payload.get("response_text")
-                    or "",
-        citations=payload.get("citations") or payload.get("sources") or [],
+        answer_text=answer_text,
+        citations=citations,
         raw=payload,
     )
 

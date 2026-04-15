@@ -3,7 +3,7 @@
 # export_png.sh — full-page PNG of the HTML dashboard via Playwright.
 #
 # Usage:
-#   ./scripts/export_png.sh reports/report_2026-04-14_213934.html reports/hero.png
+#   ./scripts/export_png.sh reports/report_<timestamp>.html reports/hero.png
 #   ./scripts/export_png.sh reports/report.html reports/hero.png 1440
 #
 # First-time setup:

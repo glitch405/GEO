@@ -67,22 +67,22 @@ You'll see a live terminal table as each AI engine answers, and a full JSON repo
 
 ```
                          AI Visibility Report — Notion
-┌────────────┬─────────────────────────────────────────┬───────────┬────────────────────┬───────┐
-│ Engine     │ Prompt                                  │ Mentioned │ Competitors        │ Score │
-├────────────┼─────────────────────────────────────────┼───────────┼────────────────────┼───────┤
-│ chatgpt    │ Notion vs Obsidian — which is better?   │   YES     │ Obsidian           │   80  │
-│ chatgpt    │ Best note-taking app with AI in 2026?   │   YES     │ Obsidian, Roam     │   60  │
-│ perplexity │ Best tool for building a second brain?  │   YES     │ Logseq, Obsidian   │   60  │
-│ google_ai  │ Best productivity app for teams?        │   YES     │ ClickUp            │   60  │
-│ google_ai  │ Where do founders take notes in 2026?   │   YES     │ Anytype, Obsidian  │   60  │
-└────────────┴─────────────────────────────────────────┴───────────┴────────────────────┴───────┘
+┌────────────┬─────────────────────────────────────────┬───────────┬──────────────────────┬───────┐
+│ Engine     │ Prompt                                  │ Mentioned │ Competitors          │ Score │
+├────────────┼─────────────────────────────────────────┼───────────┼──────────────────────┼───────┤
+│ chatgpt    │ Notion vs Obsidian — which is better?   │   YES     │ Obsidian             │   80  │
+│ chatgpt    │ Best note-taking app with AI in 2026?   │   YES     │ Obsidian, Roam       │   60  │
+│ perplexity │ Best tool for building a second brain?  │   YES     │ ClickUp, Logseq      │   60  │
+│ perplexity │ Notion vs Obsidian — comparison         │   YES     │ Obsidian             │   80  │
+│ grok       │ Where do founders take notes in 2026?   │   YES     │ Apple Notes, Coda    │   60  │
+└────────────┴─────────────────────────────────────────┴───────────┴──────────────────────┴───────┘
 
-Overall visibility score: 65.7/100
+Overall visibility score: 64.0/100
   - chatgpt:    mention rate 5/5 | avg score 64.0
-  - perplexity: mention rate 4/4 | avg score 70.0
-  - google_ai:  mention rate 5/5 | avg score 64.0
+  - perplexity: mention rate 5/5 | avg score 76.0
+  - grok:       mention rate 5/5 | avg score 52.0
 
-Report saved to reports/report_2026-04-14_213934.json
+Report saved to reports/report_2026-04-15_023531.json
 ```
 
 See [`examples/output.json`](examples/output.json) for the full schema.
@@ -113,6 +113,68 @@ Each `(engine, prompt)` pair costs one Bright Data scrape. Runs are fully reprod
 
 **Bright Data handles:** login, anti-bot, dynamic rendering, rate limits, geo routing, retries.
 **We handle:** configuration, scoring, reporting.
+
+---
+
+## How the HTML report is generated
+
+Every sweep ends by producing two artifacts: a JSON report (the raw scored data) and an HTML dashboard (the visual report). Here's the pipeline:
+
+```
+queries.yaml + ground_truth.md
+    └─► sweep.py / sweep_mcp.py        (live Bright Data calls)
+            └─► Score objects in memory
+                    └─► write_html()           (src/html_report.py)
+                            └─► f-string template + CSS variables + Google Fonts
+                                    └─► reports/report_<timestamp>.html
+                                            └─► scripts/export_png.py    (Playwright, full_page=True)
+                                                    └─► reports/hero.png    (~2880×7000 retina PNG)
+```
+
+### What `src/html_report.py` does
+
+It's a single-file generator. The public entrypoints:
+
+- **`render_html(scores, brand_name, ...)`** — returns a self-contained HTML string. No build step, no asset pipeline, no JS.
+- **`write_html(scores, brand_name, reports_dir, ...)`** — writes the rendered HTML to `reports/report_<timestamp>.html`.
+- **`render_from_json(json_path)`** — regenerates the HTML from any prior JSON report. Useful when you tweak styling and want to re-render historical sweeps.
+
+Internally, it:
+
+1. **Aggregates metrics** from the score list — overall visibility, mention rate, top-placement rate
+2. **Groups results by engine** (ChatGPT / Perplexity / Google AI / Grok)
+3. **Counts competitor frequency** across all prompts
+4. **Renders each section** via small helpers (`_render_engine_row`, `_render_competitor_row`, `_render_prompt_row`)
+5. **Resolves brand logos** via `_logo_url()` → `https://www.google.com/s2/favicons?domain=<domain>&sz=128`. If the favicon 404s in the browser, an `onerror` handler shows the brand's initials in Fraunces as fallback.
+6. **Interpolates** everything into one `HTML_TEMPLATE` string at the bottom of the file (Python `.format()` style, with `{overall_int}`, `{engine_rows}`, `{comp_rows}` placeholders)
+7. **Returns** the final HTML — fonts loaded at runtime from Google Fonts, paper grain via inline SVG data URI
+
+### Customization in 30 seconds
+
+Open `src/html_report.py`. Three places worth knowing:
+
+| What | Where | Example |
+|---|---|---|
+| **Color palette** | The `:root { --paper, --ink, --amber, ... }` block in the CSS | Change `--amber` to a different accent color |
+| **Logo domains** | `LOGO_DOMAINS` dict at the top | Add your own brand or competitor mappings |
+| **Layout sections** | The `HTML_TEMPLATE` string at the bottom | Reorder or remove sections (engines, competitors, prompts) |
+
+Re-run any sweep (or `python -m src.html_report reports/<file>.json`) and the HTML reflects your edits immediately.
+
+### Static PNG export
+
+`scripts/export_png.py` uses **Playwright** (not headless Chrome's CLI screenshot) because Chrome's `--screenshot` flag only captures the viewport. Playwright's `page.screenshot(full_page=True)` properly grows the capture to the page's `scrollHeight`.
+
+```bash
+# First-time setup (Playwright + Chromium, ~150 MB)
+pip install playwright
+playwright install chromium
+
+# Export
+./scripts/export_png.sh reports/report_<timestamp>.html reports/hero.png
+```
+
+The output is 2× retina (~2880×~7000), suitable for video composition or a high-DPI thumbnail.
 
 ---
 
