@@ -265,7 +265,7 @@ The skill reads `queries.yaml`, calls the MCP tools, runs the scorer, and layers
 
 Both paths are powered by the same Bright Data infrastructure. The MCP path is the recommended one for agents and AI-native workflows — the HTTP path is for cron / CI / environments where Node isn't available.
 
-Get an API token at [brightdata.com](https://brightdata.com/). A free tier is available — try it with the promo `[PROMO_CODE]` or DM for access.
+Get an API token at [brightdata.com](https://brightdata.com/). A free tier is available.
 
 ---
 
