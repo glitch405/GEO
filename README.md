@@ -44,8 +44,8 @@ ai-visibility-tracker/
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/<you>/ai-visibility-tracker.git
-cd ai-visibility-tracker
+git clone https://github.com/glitch405/GEO.git
+cd GEO
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
